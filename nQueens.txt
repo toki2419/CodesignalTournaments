@@ -1,0 +1,52 @@
+In chess, queens can move any number of squares vertically, horizontally, or diagonally. The n-queens puzzle is the problem of placing n queens on an n × n chessboard so that no two queens can attack each other.
+
+Given an integer n, print all possible distinct solutions to the n-queens puzzle. Each solution contains distinct board configurations of the placement of the n queens, where the solutions are arrays that contain permutations of [1, 2, 3, .. n]. The number in the ith position of the results array indicates that the ith column queen is placed in the row with that number. In your solution, the board configurations should be returned in lexicographical order.
+
+--------------------------------------------------------
+
+#define V vector<int>
+#define VV vector<vector<int>>
+
+bool isSafe(VV board, int row, int col) 
+{ 
+    int i, j; 
+    for (i = 0; i < col; i++) 
+        if (board[row][i]) 
+            return false; 
+    for (i=row, j=col; i>=0 && j>=0; i--, j--) 
+        if (board[i][j]) 
+            return false; 
+    for (i=row, j=col; j>=0 && i<board.size(); i++, j--) 
+        if (board[i][j]) 
+            return false; 
+    return true; 
+}
+
+void queenPos(VV board, int col, VV &re) 
+{
+    int N = board.size();
+    if (col == N){//found the answer
+        V row;
+        for (int i = 0; i < N; i++) 
+        { 
+            for (int j = 0; j < N; j++) 
+                if(board[i][j]) row.push_back(j+1) ;
+        }
+        re.push_back(row) ;
+    } 
+    for (int i = 0; i < N; i++) 
+    { 
+        if ( isSafe(board, i, col) ) 
+        { 
+            board[i][col] = 1; 
+            queenPos(board, col + 1, re); 
+            board[i][col] = 0;
+        } 
+    } 
+} 
+VV nQueens(int n) {
+    VV board(n,V(n,0)), re;
+    queenPos(board, 0, re);
+    sort(re.begin(), re.end());
+    return re;
+}

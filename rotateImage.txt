@@ -1,0 +1,55 @@
+Note: Try to solve this task in-place (with O(1) additional memory), since this is what you'll be asked to do during an interview.
+
+You are given an n x n 2D matrix that represents an image. Rotate the image by 90 degrees (clockwise).
+
+Example
+
+For
+
+a = [[1, 2, 3],
+     [4, 5, 6],
+     [7, 8, 9]]
+the output should be
+
+rotateImage(a) =
+    [[7, 4, 1],
+     [8, 5, 2],
+     [9, 6, 3]]
+
+--------------------------------------------------------
+
+#define VV vector<vector<int>>
+
+void rotate(int &a, int &b, int &c, int &d)
+{
+    int temp = a;
+    a = b;
+    b = c;
+    c = d;
+    d = temp;
+}
+
+VV rotateRight90Degree(VV a)
+{
+    int n = a.size();
+    for(int i = 0; i < n / 2; i++)
+        for(int j = 0; j < (n + 1) / 2; j++)
+            rotate(a[i][j], a[n - 1 - j][i], a[n - 1 - i][n - 1 - j], a[j][n - 1 - i]);
+    
+    return a;
+}
+
+VV rotateLeft90Degree(VV a)
+{
+    int n = a.size();
+    for(int i = 0; i < n / 2; i++)
+        for(int j = 0; j < (n + 1) / 2; j++)
+            rotate(a[i][j], a[j][n - 1 - i], a[n - 1 - i][n - 1 - j], a[n - 1 - j][i]);
+    
+    return a;
+}
+
+VV rotateImage(VV a)
+{
+    return rotateLeft90Degree(a);
+}

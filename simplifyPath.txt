@@ -1,34 +1,78 @@
-Note: Try to solve this task in O(n) time using O(1) additional space, where n is the number of elements in the list, since this is what you'll be asked to do during an interview.
+Given an absolute file path (Unix-style), shorten it to the format /<dir1>/<dir2>/<dir3>/....
 
-Given a singly linked list of integers l and an integer k, remove all elements from list l that have a value equal to k.
+Here is some info on Unix file system paths:
 
+/ is the root directory; the path should always start with it even if it isn't there in the given path;
+/ is also used as a directory separator; for example, /code/fights denotes a fights subfolder in the code folder in the root directory;
+this also means that // stands for "change the current directory to the current directory"
+. is used to mark the current directory;
+.. is used to mark the parent directory; if the current directory is root already, .. does nothing.
 Example
 
-For l = [3, 1, 2, 3, 4, 5] and k = 3, the output should be
-removeKFromList(l, k) = [1, 2, 4, 5];
-For l = [1, 2, 3, 4, 5, 6, 7] and k = 10, the output should be
-removeKFromList(l, k) = [1, 2, 3, 4, 5, 6, 7].
+For path = "/home/a/./x/../b//c/", the output should be
+simplifyPath(path) = "/home/a/b/c".
+
+Here is how this path was simplified:
+* /./ means "move to the current directory" and can be replaced with a single /;
+* /x/../ means "move into directory x and then return back to the parent directory", so it can replaced with a single /;
+* // means "move to the current directory" and can be replaced with a single /.
 
 ------------------------------------------------
 
-// Singly-linked lists are already defined with this interface:
-// template<typename T>
-// struct ListNode {
-//   ListNode(const T &v) : value(v), next(nullptr) {}
-//   T value;
-//   ListNode *next;
-// };
-//
-ListNode<int> * removeKFromList(ListNode<int> * l, int k) {
-    ListNode<int> * list = new ListNode(0);
-    ListNode<int> * temp=list;
-    while(l!=nullptr){
-        if(l->value!=k){
-            temp->next = l;
-            temp= temp->next;
-        } 
-        l = l->next;
+std::string simplifyPath(std::string A) {
+    stack<string> mystack;
+    int n=A.length();
+    string temp="";
+    bool path=0;
+    int i,j;
+    for(i=0;i<n;i++){
+        if(A[i]=='/'){
+            path=1;
+            if(temp.length()>2)
+                path=0;
+            for(j=0;j<temp.length() && path;j++){
+                if(temp[j]!='.')
+                    path=0;
+            }
+            if(!path)
+                mystack.push(temp);
+            else{
+                if(temp.length()==2){
+                    if(!mystack.empty())
+                        mystack.pop();
+                }
+            }
+            temp="";
+        }
+        else temp+=A[i];
     }
-    temp->next=nullptr;
-    return list->next;
+    path=1;
+    if(temp.length()>2)
+        path=0;
+    for(j=0;j<temp.length() && path;j++){
+        if(temp[j]!='.')
+            path=0;
+    }
+    if(!path)
+        mystack.push(temp);
+    else{
+        if(temp.length()==2){
+            if(!mystack.empty())
+                mystack.pop();
+        }
+    }
+    stack<string> ans;
+    while(!mystack.empty()){
+        ans.push(mystack.top());
+        mystack.pop();
+    }
+    string s="";
+    while(!ans.empty()){
+        s+="/";
+        s+=ans.top();
+        ans.pop();
+    }
+    if(s.length()==0)
+        s="/";
+    return s;
 }

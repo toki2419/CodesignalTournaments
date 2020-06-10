@@ -1,34 +1,35 @@
-Note: Try to solve this task in O(n) time using O(1) additional space, where n is the number of elements in the list, since this is what you'll be asked to do during an interview.
-
-Given a singly linked list of integers l and an integer k, remove all elements from list l that have a value equal to k.
+Given a number of the pages in some book find the number of digits one needs to print to enumerate the pages of the book.
 
 Example
 
-For l = [3, 1, 2, 3, 4, 5] and k = 3, the output should be
-removeKFromList(l, k) = [1, 2, 4, 5];
-For l = [1, 2, 3, 4, 5, 6, 7] and k = 10, the output should be
-removeKFromList(l, k) = [1, 2, 3, 4, 5, 6, 7].
+For n = 11, the output should be
+pagesNumbering(n) = 13.
+
+Input/Output
+
+[execution time limit] 0.5 seconds (cpp)
+
+[input] integer n
+
+A positive integer.
+
+Guaranteed constraints:
+1 ≤ n ≤ 108.
+
+[output] integer
 
 ------------------------------------------------
 
-// Singly-linked lists are already defined with this interface:
-// template<typename T>
-// struct ListNode {
-//   ListNode(const T &v) : value(v), next(nullptr) {}
-//   T value;
-//   ListNode *next;
-// };
-//
-ListNode<int> * removeKFromList(ListNode<int> * l, int k) {
-    ListNode<int> * list = new ListNode(0);
-    ListNode<int> * temp=list;
-    while(l!=nullptr){
-        if(l->value!=k){
-            temp->next = l;
-            temp= temp->next;
-        } 
-        l = l->next;
+int pagesNumbering(int n) {
+    int tenPower = 1,
+        digitsPerPage = 1,
+        result = 0;
+
+    while (tenPower * 10 <= n) {
+        result += tenPower * 9 * digitsPerPage;
+        tenPower *= 10;
+        digitsPerPage++;
     }
-    temp->next=nullptr;
-    return list->next;
+    result += (n - tenPower + 1) * digitsPerPage;
+    return result;
 }

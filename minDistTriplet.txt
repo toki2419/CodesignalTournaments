@@ -1,0 +1,20 @@
+You have three sorted arrays of integers: a, b, and c. Let's define distance(x, y, z) as |x - y| + |y - z| + |z - x|. Find and return the minimum possible distance(x, y, z), such that x is an element of a, y is an element of b, and z is an element of c.
+
+Example
+
+For a = [4, 30], b = [6, 12, 20], and c = [10, 37], the output should be
+minDistTriplet(a, b, c) = 12.
+
+===================================================================
+
+int distance(int x, int y, int z){
+    return abs(x-y)+abs(y-z)+abs(z-x);
+}
+int minDistTriplet(std::vector<int> a, std::vector<int> b, std::vector<int> c) {
+    int re = INT_MAX;
+    for(auto x:a)
+        for(auto y:b)
+            for(auto z:c)
+                re = min(re, distance(x, y, z));
+    return re;
+}

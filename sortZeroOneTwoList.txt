@@ -1,0 +1,56 @@
+Note: Try to solve this task in linear time, since this is what you'll be asked to do during an interview.
+
+Given a singly linked list consisting only of 0, 1, and 2, return it sorted in ascending order.
+
+Example
+
+For l = [2, 1, 0], the output should be
+sortZeroOneTwoList(l) = [0, 1, 2];
+For l = [0, 1, 0, 1, 2, 0], the output should be
+sortZeroOneTwoList(l) = [0, 0, 0, 1, 1, 2].
+
+===================================================================
+
+// Singly-linked lists are already defined with this interface:
+// template<typename T>
+// struct ListNode {
+//   ListNode(const T &v) : value(v), next(nullptr) {}
+//   T value;
+//   ListNode *next;
+// };
+//
+ListNode<int> * sortZeroOneTwoList(ListNode<int> * l) {
+    int count[3] = {0, 0, 0}; // Initialize count of '0', '1' and '2' as 0  
+    ListNode<int> *ptr = l;  
+  
+    /* count total number of '0', '1' and '2'  
+    * count[0] will store total number of '0's  
+    * count[1] will store total number of '1's  
+    * count[2] will store total number of '2's */
+    while (ptr != NULL)  
+    {  
+        count[ptr->value] += 1;  
+        ptr = ptr->next;  
+    }  
+  
+    int i = 0;  
+    ptr = l;  
+  
+    /* Let say count[0] = n1, count[1] = n2 and count[2] = n3  
+    * now start traversing list from head node,  
+    * 1) fill the list with 0, till n1 > 0  
+    * 2) fill the list with 1, till n2 > 0  
+    * 3) fill the list with 2, till n3 > 0 */
+    while (ptr != NULL)  
+    {  
+        if (count[i] == 0)  
+            ++i;  
+        else
+        {  
+            ptr->value = i;  
+            --count[i];  
+            ptr = ptr->next;  
+        }  
+    }  
+    return l;
+}

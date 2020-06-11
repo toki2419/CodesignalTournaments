@@ -1,0 +1,22 @@
+Remove all characters from a given string that appear more than once in it.
+
+Example
+For str = "zaabcbd", the output should be
+removeDuplicateCharacters(str) = "zcd".
+
+===================================================================
+
+std::string removeDuplicateCharacters(std::string str) {
+    string st = "";
+    for(int i = 0; i < str.length(); i++){
+        bool found = true;
+        for(int j = 0; j < str.length(); j++)
+            if(i!=j && str[i] == str[j]){
+                found = false;
+                break;
+            }
+        if(found)
+            st+=str[i];
+    }
+    return st;
+}

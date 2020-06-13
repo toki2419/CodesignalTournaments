@@ -1,0 +1,33 @@
+A tree is considered a binary search tree (BST) if for each of its nodes the following is true:
+
+The left subtree of a node contains only nodes with keys less than the node's key.
+The right subtree of a node contains only nodes with keys greater than the node's key.
+Both the left and the right subtrees must also be binary search trees.
+An empty tree (has no nodes) is also considered to be BST.
+
+Given a binary tree, determine whether it is a BST or not.
+
+------------------------------------------------
+
+//
+// Binary trees are already defined with this interface:
+// template<typename T>
+// struct Tree {
+//   Tree(const T &v) : value(v), left(nullptr), right(nullptr) {}
+//   T value;
+//   Tree *left;
+//   Tree *right;
+// };
+
+int isBST(Tree<int>* t, int min, int max)  
+{  
+    if (t==NULL)  
+        return 1;  
+    if (t->value < min || t->value > max)  
+        return 0;  
+    return isBST(t->left, min, t->value-1) && isBST(t->right, t->value+1, max);
+}
+
+bool isBST(Tree<int> * t) {
+    return isBST(t, INT_MIN, INT_MAX);
+}

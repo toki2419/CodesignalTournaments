@@ -1,0 +1,35 @@
+Given a binary tree and a number k, your task is to find the sum of tree nodes at level k. The binary tree is represented by a string tree with the format: (<node-value>(<left subtree>)(<right subtree>)).
+
+Example
+
+For tree = "(0(5(6()())(14()(9()())))(7(1()())(23()())))" and k = 2, the output should be
+treeLevelSum(tree, k) = 44.
+
+Explanation: The nodes at level 2 are 6, 14, 1, and 23, so the answer is 6 + 14 + 1 + 23 = 44.
+
+===================================================================
+
+int treeLevelSum(std::string t, int k) {
+    int level = -1; 
+    int sum = 0;  
+    for (int i = 0; i < t.length(); i++) 
+    { 
+        if (t[i] == '(') 
+            level++; 
+        else if (t[i] == ')') 
+            level--; 
+        else
+        {
+            if (level == k){
+                string value = "";
+                while(isdigit(t[i])){
+                    value+=t[i];
+                    i++;
+                }
+                i--;
+                sum += stoi(value); 
+            }
+        } 
+    } 
+    return sum; 
+}

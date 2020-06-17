@@ -1,0 +1,43 @@
+You have a 2D binary matrix that's filled with 0s and 1s. In the matrix, find the largest square that contains only 1s and return its area.
+
+Example
+
+For
+
+matrix = [
+    ['1', '0', '1', '1', '1'],
+    ['1', '0', '1', '1', '1'],
+    ['1', '1', '1', '1', '1'],
+    ['1', '0', '0', '1', '0'],
+    ['1', '0', '0', '1', '0']
+]
+the output should be
+maximalSquare(matrix) = 9.
+
+------------------------------------------------
+
+#define VV vector<vector<char>>
+bool check(VV matrix, int i, int j, int l, int k)
+{
+    for(int m = i; m <= l; m++)
+        for (int n = j; n <= k; n++)
+            if(matrix[m][n]=='0') return false;
+    return true;
+}
+
+int maximalSquare(VV m) {
+    int re = 0;
+    for(int i = 0; i < m.size(); i++){
+        for(int j = 0; j < m[0].size(); j++){
+            if(m[i][j]=='1'){
+                int l = i, k = j;
+                while(l < m.size() && k < m[0].size() && check(m, i, j, l, k)){
+                    re = max(re, (l-i+1)*(k-j+1));
+                    l++;
+                    k++; 
+                }
+            }
+        }
+    }
+    return re;
+}

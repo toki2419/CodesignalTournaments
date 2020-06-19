@@ -19,7 +19,7 @@ Here is how this path was simplified:
 
 ------------------------------------------------
 
-std::string simplifyPath(std::string A) {
+string simplifyPath(string A) {
     stack<string> mystack;
     int n=A.length();
     string temp="";

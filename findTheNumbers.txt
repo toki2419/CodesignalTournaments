@@ -12,17 +12,15 @@ findTheNumbers(a) = [3, 6].
 ===================================================================
 
 std::vector<int> findTheNumbers(std::vector<int> a) {
-    sort(a.begin(), a.end());
-    int i = 0;
-    vector<int> b;
-    while(i< a.size() - 1){
-        if(a[i] != a[i+1]) {
-            b.push_back(a[i]);
+    vector<int> ans;
+    sort(begin(a), end(a));
+    for(int i = 0; i < a.size()-1; i++){
+        if(a[i]==a[i+1])
             i++;
-        }
-        else i += 2;
+        else 
+            ans.push_back(a[i]);
+        if(i+2==a.size()&&a[i+1]!=a[i])
+            ans.push_back(a[i+1]);
     }
-    if(b.size() == 2) return b;
-    if(b.size() == 1) b.push_back(a[a.size()-1]);
-    return b;
+    return ans;
 }

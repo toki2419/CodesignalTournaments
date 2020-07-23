@@ -7,14 +7,21 @@ minDistTriplet(a, b, c) = 12.
 
 ===================================================================
 
-int distance(int x, int y, int z){
-    return abs(x-y)+abs(y-z)+abs(z-x);
-}
 int minDistTriplet(std::vector<int> a, std::vector<int> b, std::vector<int> c) {
-    int re = INT_MAX;
-    for(auto x:a)
-        for(auto y:b)
-            for(auto z:c)
-                re = min(re, distance(x, y, z));
-    return re;
+    int diff = INT_MAX, x = 0, y = 0, z = 0;
+    int i = 0, j = 0, k = 0; 
+    while(i < a.size() && j < b.size() && k < c.size()){
+        int mini = min(a[i], min(b[j], c[k])); 
+        int maxi = max(a[i], max(b[j], c[k])); 
+        if (maxi-mini < diff) 
+        { 
+            x = a[i], y = b[j], z = c[k];
+            diff = maxi-mini; 
+        } 
+        if (diff == 0) break; 
+        if (a[i] == mini) i++; 
+        else if (b[j] == mini) j++; 
+        else k++; 
+    }
+    return abs(x-y)+abs(y-z)+abs(z-x);
 }

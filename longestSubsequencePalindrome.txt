@@ -1,0 +1,35 @@
+Find the longest subsequence palindrome in a given array a. The longest subsequence palindrome of array a is a subsequence of indices i1 < i2 < ... < ik, where ai1ai2...aik is a palindrome.
+
+Example
+
+For a = [1, 2, 4, 1], the output should be
+longestSubsequencePalindrome(a) = 3.
+
+The longest subsequence palindrome here is either 1, 2, 1 or 1, 4, 1, both of which have a length of 3.
+
+For a = [1, 2, 3], the output should be
+longestSubsequencePalindrome(a) = 1.
+
+===============================================================================
+
+int longestSubsequencePalindrome(vector<int> a) {
+    int n = a.size(); 
+    int i, j, cl; 
+    int L[n][n];  
+    for (i = 0; i < n; i++) 
+        L[i][i] = 1; 
+    for (cl=2; cl<=n; cl++) 
+    { 
+        for (i=0; i<n-cl+1; i++) 
+        { 
+            j = i+cl-1; 
+            if (a[i] == a[j] && cl == 2) 
+               L[i][j] = 2; 
+            else if (a[i] == a[j]) 
+               L[i][j] = L[i+1][j-1] + 2; 
+            else
+               L[i][j] = max(L[i][j-1], L[i+1][j]); 
+        } 
+    }
+    return L[0][n-1];
+}

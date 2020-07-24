@@ -1,0 +1,190 @@
+You are given a matrix 4 × 4 which corresponds to the 2048 game grid. grid[0][0] corresponds to the upper left tile of the grid. Each element of the grid is equal to some power of 2 if there is a tile with that value in the corresponding position, and 0 if it corresponds to the empty spot.
+You are also given a sequence of key presses as a string path. Each character of the string equals L, R, U, or D corresponding to Left, Right, Up or Down respectively.
+Please note that in some cases after pressing an arrow key nothing will be changed.
+
+Example
+
+For
+
+grid = [[0, 0, 0, 0],
+        [0, 0, 2, 2],
+        [0, 0, 2, 4],
+        [2, 2, 4, 8]]
+and path = "RR", the output should be
+
+game2048(grid, path) = [[0, 0, 0, 0],
+                        [0, 0, 0, 4],
+                        [0, 0, 2, 4],
+                        [0, 0, 8, 8]]
+
+===================================================================
+
+void moveRight(vector<vector<int>> &g){
+    for(int i = 0; i < 4; i++){
+        //move all element to the right
+        int j = 3;
+        while(j > 0){
+            if(g[i][j]==0){
+                int k = j - 1;
+                while(k >= 0){
+                    if(g[i][k] != 0){
+                        g[i][j] = g[i][k];
+                        g[i][k] = 0;
+                        break;
+                    }
+                    k--;
+                }
+            }
+            j--;
+        }
+        //calculate 
+        j = 3;
+        while(j > 0){
+            if(g[i][j-1]==g[i][j]){
+                g[i][j]+=g[i][j-1];
+                g[i][j-1] = 0;
+                j--;
+            }
+            j--;
+        }
+        //move all element to the right again
+        j = 3;
+        while(j > 0){
+            if(g[i][j]==0){
+                g[i][j] = g[i][j-1];
+                g[i][j-1] = 0;
+            }
+            j--;
+        }
+    }
+}
+
+void moveLeft(vector<vector<int>> &g){
+    for(int i = 0; i < 4; i++){
+        int j = 0;
+        while(j < 3){
+            if(g[i][j]==0){
+                int k = j + 1;
+                while(k < 4){
+                    if(g[i][k] != 0){
+                        g[i][j] = g[i][k];
+                        g[i][k] = 0;
+                        break;
+                    }
+                    k++;
+                }
+            }
+            j++;
+        }
+        j = 0;
+        while(j < 3){
+            if(g[i][j+1]==g[i][j]){
+                g[i][j]+=g[i][j+1];
+                g[i][j+1] = 0;
+                j++;
+            }
+            j++;
+        }
+        j = 0;
+        while(j < 3){
+            if(g[i][j]==0){
+                g[i][j] = g[i][j+1];
+                g[i][j+1] = 0;
+            }
+            j++;
+        }
+    }
+}
+
+void moveUp(vector<vector<int>> &g){
+    for(int i = 0; i < 4; i++){
+        int j = 0;
+        while(j < 3){
+            if(g[j][i]==0){
+                int k = j + 1;
+                while(k < 4){
+                    if(g[k][i] != 0){
+                        g[j][i] = g[k][i];
+                        g[k][i] = 0;
+                        break;
+                    }
+                    k++;
+                }
+            }
+            j++;
+        }
+        j = 0;
+        while(j < 3){
+            if(g[j+1][i]==g[j][i]){
+                g[j][i]+=g[j+1][i];
+                g[j+1][i] = 0;
+                j++;
+            }
+            j++;
+        }
+        j = 0;
+        while(j < 3){
+            if(g[j][i]==0){
+                g[j][i] = g[j+1][i];
+                g[j+1][i] = 0;
+            }
+            j++;
+        }
+    }
+}
+
+void moveDown(vector<vector<int>> &g){
+    for(int i = 0; i < 4; i++){
+        int j = 3;
+        while(j > 0){
+            if(g[j][i]==0){
+                int k = j - 1;
+                while(k >= 0){
+                    if(g[k][i] != 0){
+                        g[j][i] = g[k][i];
+                        g[k][i] = 0;
+                        break;
+                    }
+                    k--;
+                }
+            }
+            j--;
+        }
+        j = 3;
+        while(j > 0){
+            if(g[j-1][i]==g[j][i]){
+                g[j][i]+=g[j-1][i];
+                g[j-1][i] = 0;
+                j--;
+            }
+            j--;
+        }
+        j = 3;
+        while(j > 0){
+            if(g[j][i]==0){
+                g[j][i] = g[j-1][i];
+                g[j-1][i] = 0;
+            }
+            j--;
+        }
+    }
+}
+
+std::vector<std::vector<int>> game2048(std::vector<std::vector<int>> grid, std::string path) {
+    for(auto p:path){
+        if(p=='R'){
+            moveRight(grid);
+        }
+        if(p=='L'){
+            moveLeft(grid);
+        }
+        if(p=='U'){
+            moveUp(grid);
+        }
+        if(p=='D'){
+            moveDown(grid);
+        }
+    }
+    return grid;
+}
+

@@ -1,0 +1,187 @@
+You are given the initial configuration of the board and a list of commands which the snake follows one-by-one. The game ends if one of the following happens:
+
+the snake tries to eat its tail;
+the snake tries to move out of the board;
+it executes all the given commands.
+Output the board configuration after the game ends.
+
+Example
+
+For
+gameBoard = [['.', '.', '.', '.'],
+             ['.', '.', '<', '*'],
+             ['.', '.', '.', '*']]
+and commands = "FFFFFRFFRRLLF", the output should be
+
+snakeGame(gameBoard, commands) = [['.', '.', '.', '.'],
+                                  ['X', 'X', 'X', '.'],
+                                  ['.', '.', '.', '.']]
+For
+gameBoard = [['.', '.', '^', '.', '.'],
+             ['.', '.', '*', '*', '.'],
+             ['.', '.', '.', '*', '*']]
+and commands = "RFRF", the output should be
+
+snakeGame(gameBoard, commands) = [['.', '.', 'X', 'X', '.'],
+                                  ['.', '.', 'X', 'X', '.'],
+                                  ['.', '.', '.', 'X', '.']]
+For
+gameBoard = [['.', '.', '*', '>', '.'],
+             ['.', '*', '*', '.', '.'],
+             ['.', '.', '.', '.', '.']]
+and commands = "FRFFRFFRFLFF", the output should be
+
+snakeGame(gameBoard, commands) = [['.', '.', '.', '.', '.'],
+                                  ['<', '*', '*', '.', '.'],
+                                  ['.', '.', '*', '.', '.']]
+
+===================================================================
+
+void addElem(vector<vector<int>> &snake, int i, int j, int pos = 1){
+    vector<int> v;
+    v.push_back(i);
+    v.push_back(j);
+    if(pos == 0) snake.insert(snake.begin(), v);
+    else snake.push_back(v);
+}
+
+void snakeStep(int &i, int &j, char direction){
+    if(direction == '>')
+        j++;
+    if(direction == '<')
+        j--;
+    if(direction == '^')
+        i--;
+    if(direction == 'v')
+        i++;
+}
+
+int drawSnake(vector<vector<int>> &snake, vector<std::vector<char>> g, char &direction, int &i, int &j){
+    snakeStep(i, j, direction);
+    if(i == g.size() || i < 0 || j < 0 || j == g[0].size() || g[i][j]=='.'){
+        if(i==g.size()) i--;
+        if(j==g[0].size()) j--;
+        if(j < 0) j = 0;
+        if(i < 0) i= 0;
+        
+        if((g[i][j]!='*' && direction=='v')) i--;
+        else if (g[i][j]!='*' && direction=='^') i++;
+        
+        if((g[i][j]!='*' && direction=='>')) j--;
+        else if (g[i][j]!='*' && direction=='<') j++;
+        
+        switch(direction){
+            case 'v':
+            case '^':{
+                if(j+1<g[0].size() && g[i][j+1]=='*'){
+                    direction = '>';
+                    break;    
+                } 
+                else if(j-1>=0 && g[i][j-1]=='*'){
+                    direction = '<';
+                    break;    
+                }
+                else{
+                    return 0;
+                } 
+            }
+            case '<':
+            case '>':{
+                if(i+1 < g.size() && g[i+1][j]=='*'){
+                    direction = 'v'; 
+                    break;    
+                } 
+                else if(i - 1 >=0 && g[i-1][j]=='*'){
+                    direction = '^'; 
+                    break;    
+                } 
+                else{
+                    return 0;
+                } 
+            }
+        }
+        return 1;
+    }
+    if(g[i][j]=='*')
+        addElem(snake, i, j);
+    return 1;
+}
+
+void snakeMove(vector<vector<int>> &snake, int gameBoardRow, int gameBoardCol, char direction, bool &endGame){
+    int i = snake[0][0], j = snake[0][1];
+    snakeStep(i, j, direction);
+    for(int k = 1; k < snake.size(); k++){
+        if(i == snake[k][0] && j == snake[k][1]){
+            endGame = true;
+            return;
+        }
+    }
+    if(i < 0 || i == gameBoardRow || j < 0 || j == gameBoardCol){
+        endGame = true;
+        return;
+    }
+    else{
+        addElem(snake, i, j, 0);
+        snake.erase(snake.end());
+    }
+}
+
+std::vector<std::vector<char>> snakeGame(std::vector<std::vector<char>> g, std::string commands) {
+    vector<vector<int>> snake;
+    char direction;
+    int found = 1;
+    for(int i = 0; i < g.size(); i++){
+        for(int j = 0; j < g[i].size(); j++){
+            if(g[i][j]!='.' && g[i][j]!='*'){
+                addElem(snake, i, j, 0);
+                direction = g[i][j];
+                char draw;
+                switch(direction){
+                    case '>': draw = '<'; break;
+                    case '<': draw = '>'; break;
+                    case 'v': draw = '^'; break;
+                    case '^': draw = 'v'; break;
+                }
+                while(found)
+                    found = drawSnake(snake, g, draw, i, j);
+            }
+        }
+        if(found==0) break;
+    }
+    
+    bool endGame = false;
+    for(auto c:commands){
+        if(c=='R'){
+            switch(direction){
+                case '>': direction = 'v'; break;
+                case '<': direction = '^'; break;
+                case 'v': direction = '<'; break;
+                case '^': direction = '>'; break;
+            }
+        }
+        if(c=='L'){
+            switch(direction){
+                case '>': direction = '^'; break;
+                case '<': direction = 'v'; break;
+                case 'v': direction = '>'; break;
+                case '^': direction = '<'; break;
+            }
+        }
+        if(c=='F')
+            snakeMove(snake, g.size(), g[0].size(), direction, endGame);
+        if(endGame) break;
+    }
+    for(int i = 0; i < g.size(); i++)
+        for(int j = 0; j < g[i].size(); j++)
+            g[i][j] = '.';
+    for(int i = 0; i < snake.size(); i++){
+        if(endGame)
+            g[snake[i][0]][snake[i][1]] = 'X';
+        else{
+            if(i==0) g[snake[i][0]][snake[i][1]] = direction;
+            else g[snake[i][0]][snake[i][1]] = '*';
+        }
+    }
+    return g;
+}
+

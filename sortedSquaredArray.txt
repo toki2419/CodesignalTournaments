@@ -1,0 +1,48 @@
+Note: Come up with a linear solution, since that is what you would be asked to do in an interview.
+
+You have a sorted array of integers. Write a function that returns a sorted array containing the squares of those integers.
+
+Example
+
+For array = [-6, -4, 1, 2, 3, 5], the output should be
+sortedSquaredArray(array) = [1, 4, 9, 16, 25, 36].
+
+The array of squared integers from array is: [36, 16, 1, 4, 9, 25]. When sorted, it becomes: [1, 4, 9, 16, 25, 36].
+
+===================================================================
+
+vector<int> sortedSquaredArray(vector<int> a) {
+    for(auto&i:a)
+        i = i*i;
+    sort(a.begin(), a.end());
+    return a;
+}
+
+std::vector<int> sortedSquaredArray(std::vector<int> a) {
+    vector<int> ans;
+    for(auto i:a){
+        int x = i * i;
+        if(ans.size()==0){
+            ans.push_back(x);
+            continue;
+        }
+        if(ans[0]>x){
+            ans.insert(ans.begin(), x);
+            continue;
+        }
+        int j = 0;
+        while(j < ans.size()){
+            if(ans[j] <= x && ans[j+1] >= x){
+                ans.insert(ans.begin()+j+1, x);
+                j++;
+                break;
+            }
+            j++;
+        }
+        if(ans[j]<x)
+            ans.push_back(x);
+    }
+    return ans;
+}
+
+

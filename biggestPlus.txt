@@ -1,0 +1,51 @@
+Given a matrix that contains only the characters '0' and '1', find the biggest plus sign (+) formed by 1s in this matrix and return its size. Size, in this case, indicates the length of the plus sign's edges. 
+In order to be a valid plus sign, the edges must be of equal length.
+
+For example, a plus sign with a size of k in matrix starts at cell (x, y). The plus sign's edges are (x - k, y), (x - k + 1, y), ..., (x + k, y) and (x, y - k), (x, y - k + 1), ..., (x, y + k), all with a length of k.
+
+Example
+
+For
+
+  matrix = ["0010010", 
+            "1010101",
+            "1111111", 
+            "0010000",
+            "0000000"]
+the output should be biggestPlus(matrix) = 1.
+
+Here, the biggest plus sign is centered at cell (2, 2) (0-based) and has a size of 1 since the downward facing edge is short.
+
+===================================================================
+
+bool allOne(vector<string> m){
+    for(int i = 0; i < m.size(); i++){
+        string s = m[i];
+        if(s.find('0')!=string::npos) return false;
+    }
+    return true;
+}
+int biggestPlus(vector<string> m) {
+    if(m.size()==1 || m[0].size()==1) return 0;
+    if(allOne(m)) return min(m.size(), m[0].size())/2;
+    int re = 0;
+    for(int i = 1; i < m.size() - 1; i++){
+        string s = m[i];
+        int j = s.find('1');
+        while(j!=string::npos){
+            //if(check.size()==0 || (j == jj && cc!=0)){
+                int k = 1, c = 0;
+                while(!(i - k < 0 || i + k == m.size() || j - k < 0 || j + k == m[i].size())){
+                    if(!(m[i-k][j] == '1' && m[i+k][j] == '1' && m[i][j-k] == '1' && m[i][j+k] == '1'))
+                        break;
+                    c++, k++;
+                }
+                re = max(re, c);
+                j = s.find('1', j + 1);
+            //}
+        }
+    }
+    return re;
+}
+
+

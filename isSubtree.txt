@@ -1,0 +1,22 @@
+Given two binary trees t1 and t2, determine whether the second tree is a subtree of the first tree. 
+A subtree for vertex v in a binary tree t is a tree consisting of v and all its descendants in t. 
+Determine whether or not there is a vertex v (possibly none) in tree t1 such that a subtree for vertex v (possibly empty) in t1 equals t2.
+
+===================================================================
+
+bool isEqual(Tree<int>* p, Tree<int>* q){
+     if(!p || !q)
+        return p == q;
+     else
+        return p->value == q->value && isEqual(p->left, q->left) && isEqual(p->right, q->right);
+}
+    
+bool isSubtree(Tree<int> * s, Tree<int> * t) {
+    if(!s || !t)
+        return s == t || t == NULL;
+    else
+        return isEqual(s, t) || isSubtree(s->left, t) || isSubtree(s->right, t);
+}
+
+
+

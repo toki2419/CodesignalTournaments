@@ -1,0 +1,34 @@
+You have a 2D array coins with the following format: [x, y], where x and y are the coordinates of a coin. Using these coordinates, you're going to start collecting coins!
+
+Assume that you start collecting coins at position (0, 0). You can only step from coordinate (a, b) to coordinate (a + dx, b + dy), where dx ≥ 0 and dy ≥ 0. Calculate the maximum number of coins that you can collect.
+
+If there is more than one coin at the same coordinates, you can take them all.
+
+Example
+
+For coins = [[0, 1], [1, 1], [2, 0], [1, 2], [2, 2]],
+the output should be maximizeCoins(coins) = 4.
+
+You can collect coins from positions (0, 1), (1, 1), (1, 2) and (2, 2), for a total of 4 coins.
+
+===================================================================
+
+int maximizeCoins(std::vector<std::vector<int> > coins) {
+    int mX=0, mY=0;
+    for(auto c:coins){
+        mX = max(mX, c[0]);
+        mY = max(mY, c[1]);
+    }
+    vector<vector<int> > cM(++mX+1, vector<int>(++mY+1));
+    for(auto c:coins)
+        cM[c[0]+1][c[1]+1]++;
+    
+    for(int i=1; i<=mX; i++){
+        for (int j=1; j<=mY; j++) {
+            cM[i][j] += max(cM[i-1][j],cM[i][j-1]);
+        }
+    }
+    return cM[mX][mY];
+}
+
+

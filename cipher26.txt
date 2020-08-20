@@ -1,0 +1,42 @@
+You've intercepted an encrypted message, and you are really curious about its contents. You were able to find out that the message initially contained only lowercase English letters, and was encrypted with the following cipher:
+
+Let all letters from 'a' to 'z' correspond to the numbers from 0 to 25, respectively.
+The number corresponding to the ith letter of the encrypted message is then equal to the sum of numbers corresponding to the first i letters of the initial unencrypted message modulo 26.
+Now that you know how the message was encrypted, implement the algorithm to decipher it.
+
+Example
+
+For message = "taiaiaertkixquxjnfxxdh", the output should be
+cipher26(message) = "thisisencryptedmessage".
+
+The initial message "thisisencryptedmessage" was encrypted as follows:
+
+letter 0: t -> 19 -> t;
+letter 1: th -> (19 + 7) % 26 -> 0 -> a;
+letter 2: thi -> (19 + 7 + 8) % 26 -> 8 -> i;
+etc.
+
+===================================================================
+
+std::string cipher26(std::string m) {
+    int toSubtract = 0;
+    string re = "";
+    for(int i = 0; i < m.length(); i++){
+        int c = m[i] - toSubtract - 'a';
+        while(c < 0)
+            c+=26;
+        re += 'a'+c;
+        toSubtract += m[i] - toSubtract - 'a';
+    }
+    return re;
+}
+
+std::string cipher26Foward(std::string m) {
+    int total = 0;
+    string result = "";
+    for (int i = 0; i < m.length(); i++) {
+        total += (m[i] - 'a');
+        result += (total % 26) + 'a';
+    }
+    return result;
+}

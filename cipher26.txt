@@ -22,11 +22,11 @@ std::string cipher26(std::string m) {
     int toSubtract = 0;
     string re = "";
     for(int i = 0; i < m.length(); i++){
-        int c = m[i] - toSubtract - 'a';
+        int c = m[i] - toSubtract - 'a', cc = c;
         while(c < 0)
             c+=26;
         re += 'a'+c;
-        toSubtract += m[i] - toSubtract - 'a';
+        toSubtract += cc;
     }
     return re;
 }
